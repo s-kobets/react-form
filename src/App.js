@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Counter from './component/counter'
+import Counters from './component/counters'
 import { Provider } from 'react-redux';
 import store from './store'
 
@@ -17,7 +17,7 @@ class App extends Component {
             To get started, edit <code>src/App.js</code> and save to reload.
           </p>
 
-          <Counter />
+          <Counters />
         </div>
       </Provider>
     );

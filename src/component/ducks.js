@@ -1,5 +1,13 @@
-const initialState = {
-    counter: 0
+export const initialState = {
+    counter: {
+        total: 0,
+        parent: 0,
+        children: 0,
+    },
+    validate: {
+        increment: true,
+        decrement: false, 
+    }
 }
 
 export function reducerCounter(state=initialState, action) {

@@ -1,43 +1,34 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { actions as storeActions } from './ducks'
 
 class Counter extends Component {
-    render() {
-        return (
-            <div>
-                <button onClick={this.decrement.bind(this)}>-</button>
-                <span>
-                    {this.props.reducerCounter.counter}
-                </span>
-                <button onClick={this.increment.bind(this)}>+</button>
-            </div>
-        )
-    }
-
-    increment() {
-        this.props.actions.increment();
-    }
-
-    decrement() {
-        const counter = this.props.reducerCounter.counter;
-        if (counter > 0) {
-            this.props.actions.decrement();
+  render() {
+    const {input: { value }} = this.props;
+    const {meta: { error }} = this.props;
+    console.log(this.props, error);
+    return (
+      <div>
+        { error !== 'decrementFalse' &&
+          <button onClick={this.decrement}>-</button>
         }
-    }
-}
+        <span>
+          {value}
+        </span>
+        { error !== 'incrementFalse' &&
+          <button onClick={this.increment}>+</button>
+        }
+      </div>
+    )
+  }
 
-const mapStateToProps = (state) => {
-  return {
-    reducerCounter: state.reducerCounter
+  increment = () => {
+    this.props.input.onChange(this.props.input.value + 1)
+    this.props.actions.increment();
+  }
+
+  decrement = () => {
+    this.props.input.onChange(this.props.input.value - 1)
+    this.props.actions.decrement();
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-      actions: bindActionCreators(storeActions, dispatch),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+export default Counter

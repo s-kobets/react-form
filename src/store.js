@@ -1,14 +1,14 @@
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { createStore, combineReducers } from 'redux';
-import { reducerCounter } from './component/ducks'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { createStore, combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 
 function parent(state={}, action) {
     return state;
 }
 
 const rootReducer = combineReducers({
+  form: formReducer,
   parent,
-  reducerCounter
 });
 
 const store = createStore(rootReducer, composeWithDevTools());
