@@ -1,36 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Field, reduxForm } from 'redux-form';
-import { actions as storeActions, initialState } from './ducks'
+import { Field, reduxForm, formValueSelector } from 'redux-form';
+import initialValues from './initialValues'
 import Counter from './counter'
-
-const maxValue = max => value =>
-  value && value >= max ? `incrementFalse` : undefined
-
-const maxValue9 = maxValue(9)
-
-const minValue = min => value =>
- (value || value === 0)  && value <= min ? `decrementFalse` : undefined
-
-const minValue0 = minValue(0)
 
 class Counters extends Component {
   render() {
     return (
       <div>
         <Field
-          name="counter.parent"
+          name="parent"
           component={Counter}
-          actions={this.props.actions}
-          validate={[maxValue9, minValue0]}
+          parent={this.props.parent}
         />
           <Field
-            name="counter.children"
+            name="children"
             component={Counter}
-            actions={this.props.actions}
-            validate={[maxValue9, minValue0]}
+            parent={this.props.parent}
           />
+
+          <p>Total: {this.props.total}</p>
         </div>
     )
   }
@@ -39,16 +28,26 @@ class Counters extends Component {
 // Decorate the form component
 const CountersForm = reduxForm({
   form: 'counters',
-  initialValues: initialState,
+  initialValues,
+  /* if children all less or equal parent */
+  // onChange(values) {
+  //   const {parent, children} = values
+
+  //   if (parent < children) {
+  //     values.children = parent
+  //   }
+  // },
 })(Counters);
 
+const selector = formValueSelector('counters')
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => {
+  const {parent, children} = selector(state, 'parent', 'children')
 
-const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(storeActions, dispatch),
+    parent,
+    total: parent + children,
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CountersForm);
+export default connect(mapStateToProps)(CountersForm);

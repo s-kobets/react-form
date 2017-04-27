@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 
 class Counter extends Component {
   render() {
-    const {input: { value }} = this.props;
-    const {meta: { error }} = this.props;
-    console.log(this.props, error);
+    const {input: { value, name }, parent} = this.props;
+
     return (
       <div>
-        { error !== 'decrementFalse' &&
+        <div><strong>{name}</strong></div>
+        { ((name === 'parent' && value > 1) || (name !== 'parent' && value !== 0)) &&
           <button onClick={this.decrement}>-</button>
         }
         <span>
           {value}
         </span>
-        { error !== 'incrementFalse' &&
+        { ((name === 'children' && value !== parent) || (name !== 'children' && value !== 9)) &&
           <button onClick={this.increment}>+</button>
         }
       </div>
@@ -22,12 +22,10 @@ class Counter extends Component {
 
   increment = () => {
     this.props.input.onChange(this.props.input.value + 1)
-    this.props.actions.increment();
   }
 
   decrement = () => {
     this.props.input.onChange(this.props.input.value - 1)
-    this.props.actions.decrement();
   }
 }
 

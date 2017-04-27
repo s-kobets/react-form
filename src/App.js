@@ -16,6 +16,10 @@ class App extends Component {
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
           </p>
+          <ul className="App-intro">
+            <li>Children all less or equal</li>
+            <li> max counter 9</li>
+          </ul>
 
           <Counters />
         </div>
