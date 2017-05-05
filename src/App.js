@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import store from './store'
 import User from './component/user'
 import Passengers from './component/passengers'
+import Button from './component/submit'
 
 class App extends Component {
   render() {    
@@ -19,7 +20,8 @@ class App extends Component {
           </p>
 
           <User />
-          <Passengers />
+          <Passengers user={store.getState().form}/>
+          <Button />
         </div>
       </Provider>
     );

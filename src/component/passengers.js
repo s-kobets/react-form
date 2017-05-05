@@ -44,7 +44,7 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
     </label>
 )
 
-const renderPassengers = ({ fields, meta: { touched, error, submitFailed } }) => (
+const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFailed } }) => (
   <ul>
     <li>
       <button type="button" onClick={() => fields.push({})}>+ Member</button>
@@ -57,32 +57,46 @@ const renderPassengers = ({ fields, meta: { touched, error, submitFailed } }) =>
           title="Remove Member"
           onClick={() => fields.remove(index)}
         >x</button>
-        <Field name={`${member}.firstName`} type="text" component={renderInput} label="Фамилия"/>
-        <Field name={`${member}.lastName`} type="text" component={renderInput} label="Имя"/>
-        <Field name={`${member}.gender`} component={renderGender} label="Пол"></Field>
+        { memberAll && memberAll[index] && Object.keys(memberAll[index]).length === 0 && <div>
+            <label>
+              <Field name={`${member}.age`} component="input" type="radio" value="adult" />
+              adult
+            </label>
+
+            <label>
+              <Field name={`${member}.age`} component="input" type="radio" value="children" />
+              children
+            </label>
+
+            <label>
+              <Field name={`${member}.age`} component="input" type="radio" value="infant" />
+              infant
+            </label>
+          </div>
+        }
+        { memberAll && memberAll[index] && Object.keys(memberAll[index]).length !== 0 && <div>
+            <h4>{memberAll[index].age}</h4>
+            <Field name={`${member}.firstName`} type="text" component={renderInput} label="Фамилия"/>
+            <Field name={`${member}.lastName`} type="text" component={renderInput} label="Имя"/>
+            <Field name={`${member}.gender`} component={renderGender} label="Пол"></Field>
+            <Field name={`${member}.birthday`} type="date" component={renderInput} label="Возраст"></Field>
+          </div>
+        }
       </li>
     )}
   </ul>
 )
 
-
 class Forms extends Component {
-
-  submit = (values) => {
-    console.log(values)
-  }
-
   render() {
     return (
       <div>
-        <form onSubmit={this.props.handleSubmit(this.submit)}>
+        <form>
           <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
           <Field name="lastName" type="text" component={renderInput} label="Имя"/>
           <Field name="gender" component={renderGender} label="Пол"></Field>
-
-          <FieldArray name="member" component={renderPassengers}/>
-
-          <button>Submit</button>
+          <Field name="birthday" type="date" component={renderInput} label="Возраст"></Field>
+          <FieldArray name="member" component={renderPassengers} memberAll={this.props.memberAll}/>
         </form>
       </div>
     )
@@ -95,18 +109,14 @@ const reduxForms = reduxForm({
   validate
 })(Forms);
 
-// const selector = formValueSelector('passengers')
+const selector = formValueSelector('passengers')
 
-// const mapStateToProps = (state) => {
-//   const {firstName, lastName, gender} = selector(state, 'firstName', 'lastName', 'gender')
+const mapStateToProps = (state) => {
+  const memberAll = selector(state, 'member')
 
-//   return {
-//      dataPassengers: { 
-//       firstName,
-//       lastName,
-//       gender,
-//     }
-//   }
-// }
+  return {
+     memberAll
+  }
+}
 
-export default connect()(reduxForms);
+export default connect(mapStateToProps)(reduxForms);
