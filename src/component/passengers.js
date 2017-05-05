@@ -2,21 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
-
-const validate = values => {
-  const errors = {}
-  if (!values.firstName) {
-    errors.firstName = 'Required'
-  } else if (!/[a-zA-Z]$/i.test(values.firstName)) {
-    errors.firstName = 'только латинские буквы'
-  }
-  if (!values.lastName) {
-    errors.lastName = 'Required'
-  } else if (!/[a-zA-Z]$/i.test(values.lastName)) {
-    errors.lastName = 'только латинские буквы'
-  }
-  return errors
-}
+import { validate } from '../validate'
 
 const renderInput = ({ input, label, type, meta: { touched, error } }) => (
     <label>

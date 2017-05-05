@@ -1,7 +1,6 @@
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 
 const validate = values => {
   const errors = {}
@@ -54,10 +53,6 @@ class Forms extends Component {
           <Field name="email" type="email" component={renderInput} label="Электронная почта"/>
           <Field name="phone" type="tel" component={renderInput} normalize={normalizePhone} label="Телефон"/>
         </form>
-
-        <code>email {this.props.dataUser.email}</code>
-        <br/>
-        <code>phone {this.props.dataUser.phone}</code>
       </div>
     )
   }
@@ -69,17 +64,4 @@ const reduxForms = reduxForm({
   validate
 })(Forms);
 
-const selector = formValueSelector('user')
-
-const mapStateToProps = (state) => {
-  const {email, phone} = selector(state, 'email', 'phone')
-
-  return {
-    dataUser: {
-      email,
-      phone,
-    }
-  }
-}
-
-export default connect(mapStateToProps)(reduxForms);
+export default connect()(reduxForms);
