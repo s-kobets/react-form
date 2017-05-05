@@ -55,9 +55,8 @@ const renderPassengers = ({ fields, meta: { touched, error, submitFailed } }) =>
         <button
           type="button"
           title="Remove Member"
-          onClick={() => fields.remove(index)}/>
-        <h4>Member #{index + 1}</h4>
-
+          onClick={() => fields.remove(index)}
+        >x</button>
         <Field name={`${member}.firstName`} type="text" component={renderInput} label="Фамилия"/>
         <Field name={`${member}.lastName`} type="text" component={renderInput} label="Имя"/>
         <Field name={`${member}.gender`} component={renderGender} label="Пол"></Field>
@@ -68,35 +67,25 @@ const renderPassengers = ({ fields, meta: { touched, error, submitFailed } }) =>
 
 
 class Forms extends Component {
+
+  submit = (values) => {
+    console.log(values)
+  }
+
   render() {
     return (
       <div>
-        <form>
+        <form onSubmit={this.props.handleSubmit(this.submit)}>
           <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
           <Field name="lastName" type="text" component={renderInput} label="Имя"/>
           <Field name="gender" component={renderGender} label="Пол"></Field>
 
           <FieldArray name="member" component={renderPassengers}/>
-          {this.datePassengers()}
+
+          <button>Submit</button>
         </form>
       </div>
     )
-  }
-
-  datePassengers() {
-    this.props.dataPassengers.map((passenger) => {
-          console.log(passenger)
-
-      return (
-        <div>
-          <code>firstName {passenger.firstName}</code>
-          <br/>
-          <code>lastName {passenger.lastName}</code>
-          <br/>
-          <code>gender {passenger.gender}</code>
-        </div>
-      )
-    })
   }
 }
 
@@ -106,22 +95,18 @@ const reduxForms = reduxForm({
   validate
 })(Forms);
 
-const selector = formValueSelector('passengers')
+// const selector = formValueSelector('passengers')
 
-const mapStateToProps = (state) => {
-  const {firstName, lastName, gender, member} = selector(state, 'firstName', 'lastName', 'gender', 'member')
+// const mapStateToProps = (state) => {
+//   const {firstName, lastName, gender} = selector(state, 'firstName', 'lastName', 'gender')
 
-  const dataPassengers = [{firstName, lastName, gender}]; 
+//   return {
+//      dataPassengers: { 
+//       firstName,
+//       lastName,
+//       gender,
+//     }
+//   }
+// }
 
-  if (member && member.length > 0) {
-    member.forEach((passenger) => {
-      return dataPassengers.concat(passenger)
-    })
-    
-  }
-  return {
-    dataPassengers
-  }
-}
-
-export default connect(mapStateToProps)(reduxForms);
+export default connect()(reduxForms);
