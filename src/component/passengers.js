@@ -30,6 +30,13 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
     </label>
 )
 
+const renderRadio = ({ input, label, meta: { touched, error } }) => (
+    <label>
+      <Field name={input.name} component="input" type="radio" value={label}  />
+      {label}
+    </label>
+)
+
 const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFailed } }) => (
   <ul>
     <li>
@@ -44,20 +51,11 @@ const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFai
           onClick={() => fields.remove(index)}
         >x</button>
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length === 0 && <div>
-            <label>
-              <Field name={`${member}.age`} component="input" type="radio" value="adult" />
-              adult
-            </label>
+            <Field name={`${member}.age`} component={renderRadio} label="adult"/>
 
-            <label>
-              <Field name={`${member}.age`} component="input" type="radio" value="children" />
-              children
-            </label>
+            <Field name={`${member}.age`} component={renderRadio} label="children" />
 
-            <label>
-              <Field name={`${member}.age`} component="input" type="radio" value="infant" />
-              infant
-            </label>
+            <Field name={`${member}.age`} component={renderRadio} label="infant" />
           </div>
         }
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length !== 0 && <div>
