@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getFormSyncErrors, getFormAsyncErrors } from 'redux-form'
+import { getFormSyncErrors } from 'redux-form'
 
 class Button extends Component {
     handleSubmit = () => {

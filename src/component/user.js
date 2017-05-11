@@ -32,7 +32,6 @@ const renderInput = ({ input, label, type, meta: { touched, error } }) => (
         success={touched && !error && true}
         size="small"
         value={input.value || '9'}
-        placeholder=""
       /> :  <Input
         {...input}
         type={type}
@@ -41,9 +40,7 @@ const renderInput = ({ input, label, type, meta: { touched, error } }) => (
         error={touched && error && true}
         success={touched && !error && true}
         size="small"
-        placeholder=""
       />
-      
       }
      
     </label>

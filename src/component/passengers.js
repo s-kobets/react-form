@@ -15,21 +15,8 @@ const renderInput = ({ input, label, type, meta: { touched, error } }) => (
         error={touched && error && true}
         success={touched && !error && true}
         size="small"
-        placeholder=""
       />
     </label>
-)
-
-const renderChecked = ({ input, label, type, title, index, meta: { touched, error } }) => (
-    <BlockChecked
-      name={`radio${index}`}
-      title={title}
-      error={touched && error && true}
-      success={touched && !error && true}
-      htmlFor={`name${index}`}
-      value="adult"
-      price="1234"
-    />
 )
 
 const renderGender = ({ input, label, type, meta: { touched, error } }) => (
@@ -51,7 +38,7 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
 const renderRadio = ({ input, label, title, price, index, meta: { touched, error } }) => (
     <BlockChecked
       {...input}
-      htmlFor={label+index}
+      htmlFor={`${label}[${index}]`}
       name={input.name}
       title={title}
       value={label}
@@ -64,10 +51,6 @@ const renderRadio = ({ input, label, title, price, index, meta: { touched, error
 
 const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFailed } }) => (
   <ul>
-    <li>
-      <button type="button" onClick={() => fields.push({})}>+ Member</button>
-      {(touched || submitFailed) && error && <span>{error}</span>}
-    </li>
     {fields.map((member, index) =>
       <li key={index}>
         <button
@@ -114,6 +97,10 @@ const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFai
         }
       </li>
     )}
+    <li>
+      <button type="button" onClick={() => fields.push({})}>+ Member</button>
+      {(touched || submitFailed) && error && <span>{error}</span>}
+    </li>
   </ul>
 )
 

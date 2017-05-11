@@ -1,5 +1,5 @@
 export const validateUser = (values) => {
-  const errors = {}
+  let errors = {}
   if (!values.email) {
     errors.email = 'Required'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -14,7 +14,7 @@ export const validateUser = (values) => {
 }
 
 export const validatePassenger = (values) => {
-  const errors = {}
+  let errors = {}
 
   if (!values.firstName) {
     errors.firstName = 'Required'
@@ -37,15 +37,17 @@ export const validatePassenger = (values) => {
   }
 
   if (values.member) {
-    const membersArrayErrors = []
+    let membersArrayErrors = []
     values.member.forEach((member, memberIndex) => {
-      const memberErrors = {}
+      let memberErrors = {}
+
       if (!member.firstName) {
         memberErrors.firstName = 'Required'
         membersArrayErrors[memberIndex] = memberErrors
       } else if (!/[a-zA-Z]$/i.test(member.firstName)) {
         memberErrors.firstName = 'только латинские буквы'
         membersArrayErrors[memberIndex] = memberErrors
+        console.log(member.firstName, memberErrors)
       }
       if (!member || !member.lastName) {
         memberErrors.lastName = 'Required'
