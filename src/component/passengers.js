@@ -32,8 +32,19 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
 
 const renderRadio = ({ input, label, meta: { touched, error } }) => (
     <label>
-      <Field name={input.name} component="input" type="radio" value={label}  />
-      {label}
+      <input
+        {...input}
+        name={input.name}
+        type="radio"
+        value={label}
+        errorText={touched && error && error}
+        error={touched && error && true}
+        success={touched && !error && true}
+        style={{display: 'none'}}
+      />
+      <div 
+        style={{display: 'inline-block', 'margin-left': '10px', padding: '5px 10px', border: '1px solid red'}}
+      >{label}</div>
     </label>
 )
 
