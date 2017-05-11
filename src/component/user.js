@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Input } from '@kupibilet/ui'
-import { validate } from '../validate'
+import { validateUser as validate } from '../validate'
 
 const normalizePhone = (value) => {
   if (!value) {

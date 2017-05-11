@@ -1,4 +1,4 @@
-export const validate = (values) => {
+export const validateUser = (values) => {
   const errors = {}
   if (!values.email) {
     errors.email = 'Required'
@@ -9,6 +9,12 @@ export const validate = (values) => {
   if (!values.phone) {
     errors.phone = 'Required'
   }
+
+  return errors
+}
+
+export const validatePassenger = (values) => {
+  const errors = {}
 
   if (!values.firstName) {
     errors.firstName = 'Required'

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
-import { validate } from '../validate'
+import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked } from '@kupibilet/ui'
 
 const renderInput = ({ input, label, type, meta: { touched, error } }) => (
@@ -48,19 +48,18 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
     </label>
 )
 
-const renderRadio = ({ input, label, meta: { touched, error } }) => (
-    <label>
-      <BlockChecked
-        {...input}
-        name={input.name}
-        title={label}
-        value={label}
-        price="12 234 ₽"
-        errorText={touched && error && error}
-        error={touched && error && true}
-        success={touched && !error && true}
-      />
-    </label>
+const renderRadio = ({ input, label, title, price, index, meta: { touched, error } }) => (
+    <BlockChecked
+      {...input}
+      htmlFor={label+index}
+      name={input.name}
+      title={title}
+      value={label}
+      price={price}
+      errorText={touched && error && error}
+      error={touched && error && true}
+      success={touched && !error && true}
+    />
 )
 
 const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFailed } }) => (
@@ -77,11 +76,32 @@ const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFai
           onClick={() => fields.remove(index)}
         >x</button>
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length === 0 && <div>
-            <Field name={`${member}.age`} component={renderRadio} label="adult"/>
+            <Field
+              name={`${member}.age`}
+              component={renderRadio}
+              label="adult"
+              title="Взрослый"
+              price="3450 ₽"
+              index={index}
+            />
 
-            <Field name={`${member}.age`} component={renderRadio} label="children" />
+            <Field
+              name={`${member}.age`}
+              component={renderRadio}
+              label="children"
+              title="Ребенок"
+              price="3150 ₽"
+              index={index}
+            />
 
-            <Field name={`${member}.age`} component={renderRadio} label="infant" />
+            <Field
+              name={`${member}.age`}
+              component={renderRadio}
+              label="infant"
+              title="Младенец"
+              price="Бесплатно"
+              index={index}
+            />
           </div>
         }
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length !== 0 && <div>

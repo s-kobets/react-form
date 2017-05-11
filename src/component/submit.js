@@ -21,8 +21,10 @@ class Button extends Component {
             <div>
                 <button 
                     onClick={this.handleSubmit}
-                    disabled={ this.props.syncErrorsUser || this.props.syncErrorsPassengers ? true : false}                >Submit</button>
-                {/*<div>{this.renderError()}</div>*/}
+                    disabled={ this.props.syncErrorsUser || this.props.syncErrorsPassengers ? true : false}
+                >
+                Submit</button>
+                <div>{this.renderError()}</div>
             </div>
         )
     }
