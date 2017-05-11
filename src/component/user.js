@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-
-const validate = values => {
-  const errors = {}
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'не верный email'
-  }
-  if (!values.phone) {
-    errors.phone = 'Required'
-  }
-  return errors
-}
+import { Input } from '@kupibilet/ui'
+import { validate } from '../validate'
 
 const normalizePhone = (value) => {
   if (!value) {
@@ -34,14 +23,29 @@ const normalizePhone = (value) => {
 const renderInput = ({ input, label, type, meta: { touched, error } }) => (
     <label>
       {label}
-      <input
+      { type === 'tel' ?  <Input
         {...input}
         type={type}
         placeholder={label}
         errorText={touched && error && error}
         error={touched && error && true}
         success={touched && !error && true}
+        size="small"
+        value={input.value || '9'}
+        placeholder=""
+      /> :  <Input
+        {...input}
+        type={type}
+        placeholder={label}
+        errorText={touched && error && error}
+        error={touched && error && true}
+        success={touched && !error && true}
+        size="small"
+        placeholder=""
       />
+      
+      }
+     
     </label>
 )
 
@@ -61,7 +65,7 @@ class Forms extends Component {
 // Decorate the form component
 const reduxForms = reduxForm({
   form: 'user',
-  validate
+  validate,
 })(Forms);
 
 export default connect()(reduxForms);

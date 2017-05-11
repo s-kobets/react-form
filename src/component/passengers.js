@@ -1,50 +1,65 @@
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { validate } from '../validate'
+import { Input, BlockChecked } from '@kupibilet/ui'
 
 const renderInput = ({ input, label, type, meta: { touched, error } }) => (
     <label>
       {label}
-      <input
+      <Input
         {...input}
         type={type}
         placeholder={label}
         errorText={touched && error && error}
         error={touched && error && true}
         success={touched && !error && true}
+        size="small"
+        placeholder=""
       />
     </label>
+)
+
+const renderChecked = ({ input, label, type, title, index, meta: { touched, error } }) => (
+    <BlockChecked
+      name={`radio${index}`}
+      title={title}
+      error={touched && error && true}
+      success={touched && !error && true}
+      htmlFor={`name${index}`}
+      value="adult"
+      price="1234"
+    />
 )
 
 const renderGender = ({ input, label, type, meta: { touched, error } }) => (
     <label>
       {label}
-      <Field name={input.name} component="select">
+      <Field
+        name={input.name}
+        component="select"
+        error={touched && error && true}
+        success={touched && !error && true}
+      >
         <option></option>
         <option value="male">M</option>
         <option value="female">Ж</option>
       </Field>
-      {touched && error && <span>{error}</span>}
     </label>
 )
 
 const renderRadio = ({ input, label, meta: { touched, error } }) => (
     <label>
-      <input
+      <BlockChecked
         {...input}
         name={input.name}
-        type="radio"
+        title={label}
         value={label}
+        price="12 234 ₽"
         errorText={touched && error && error}
         error={touched && error && true}
         success={touched && !error && true}
-        style={{display: 'none'}}
       />
-      <div 
-        style={{display: 'inline-block', 'margin-left': '10px', padding: '5px 10px', border: '1px solid red'}}
-      >{label}</div>
     </label>
 )
 
