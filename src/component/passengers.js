@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { validatePassenger as validate } from '../validate'
-import { Input, BlockChecked } from '@kupibilet/ui'
+import { Input, BlockChecked } from '../ui/lib'
 
 const renderInput = ({ input, label, type, meta: { touched, error } }) => (
     <label>

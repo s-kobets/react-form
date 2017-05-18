@@ -4,13 +4,15 @@
   "private": true,
   "dependencies": {
     "@kupibilet/icons": "^3.3.0",
-    "@kupibilet/ui": "^1.2.4",
+    "polished": "^1.1.2",
+    "rc-collapse": "^1.7.5",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",
-    "redux-form": "^6.6.3"
+    "redux-form": "^6.6.3",
+    "styled-components": "^1.4.6"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
