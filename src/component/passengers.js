@@ -49,8 +49,10 @@ const renderRadio = ({ input, label, title, price, index, meta: { touched, error
     />
 )
 
-const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFailed } }) => (
-  <ul>
+const renderPassengers = (props) => {
+  const { memberAll, fields, meta: { touched, error, submitFailed } } = props
+  console.log(fields, fields.getAll())
+  return ( <ul>
     {fields.map((member, index) =>
       <li key={index}>
         <button
@@ -102,7 +104,8 @@ const renderPassengers = ({ memberAll, fields, meta: { touched, error, submitFai
       {(touched || submitFailed) && error && <span>{error}</span>}
     </li>
   </ul>
-)
+  )
+}
 
 class Forms extends Component {
   render() {
