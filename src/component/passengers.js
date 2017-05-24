@@ -49,9 +49,12 @@ const renderRadio = ({ input, label, title, price, index, meta: { touched, error
     />
 )
 
-const renderPassengers = (props) => {
-  const { memberAll, fields, meta: { touched, error, submitFailed } } = props
-  console.log(fields, fields.getAll())
+const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, submitFailed }}) => {
+  function addPassenger() {
+    fields.push({})
+  }
+
+  console.log(counter)
   return ( <ul>
     {fields.map((member, index) =>
       <li key={index}>
@@ -99,28 +102,33 @@ const renderPassengers = (props) => {
         }
       </li>
     )}
-    <li>
-      <button type="button" onClick={() => fields.push({})}>+ Member</button>
-      {(touched || submitFailed) && error && <span>{error}</span>}
-    </li>
+    { ((counter && counter.total < 9) || counter === undefined) && <li>
+        <button type="button" onClick={addPassenger}>+ Member</button>
+        {(touched || submitFailed) && error && <span>{error}</span>}
+      </li>
+    }
   </ul>
   )
 }
 
-class Forms extends Component {
-  render() {
-    return (
-      <div>
-        <form>
-          <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
-          <Field name="lastName" type="text" component={renderInput} label="Имя"/>
-          <Field name="gender" component={renderGender} label="Пол"></Field>
-          <Field name="birthday" type="date" component={renderInput} label="Возраст"></Field>
-          <FieldArray name="member" component={renderPassengers} memberAll={this.props.memberAll}/>
-        </form>
-      </div>
-    )
-  }
+function Forms(props) {
+  console.log(props)
+  return (
+    <div>
+      <form>
+        <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
+        <Field name="lastName" type="text" component={renderInput} label="Имя"/>
+        <Field name="gender" component={renderGender} label="Пол"></Field>
+        <Field name="birthday" type="date" component={renderInput} label="Возраст"></Field>
+        <FieldArray
+          name="member"
+          component={renderPassengers}
+          memberAll={props.memberAll}
+          counter={props.counter}
+        />
+      </form>
+    </div>
+  )
 }
 
 // Decorate the form component
@@ -133,9 +141,11 @@ const selector = formValueSelector('passengers')
 
 const mapStateToProps = (state) => {
   const memberAll = selector(state, 'member')
+  const counter = selector(state, 'counter')
 
   return {
-     memberAll
+     memberAll,
+     counter
   }
 }
 

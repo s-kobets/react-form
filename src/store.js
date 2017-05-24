@@ -23,19 +23,7 @@ const rootReducer = combineReducers({
           })
           const total = infant + adult + children
 
-          return {...state, values: {...state.values, total, adult, children, infant}}
-        case actionTypes.ARRAY_REMOVE:
-          infant = state.values.infant
-          adult = state.values.adult
-          children = state.values.children
-
-          state.values.member.forEach((passenger) => {
-            if (passenger.age === "infant") infant -= 1
-            if (passenger.age === "adult") adult -= 1
-            if (passenger.age === "children") children -= 1
-          })
-          total = infant + adult + children
-          return {...state, values: {...state.values, total, adult, children, infant}}
+          return {...state, values: {...state.values, counter: {...state.values.counter, total, adult, children, infant }}}
 
         default:
           return state
