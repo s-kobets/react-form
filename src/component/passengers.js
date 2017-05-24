@@ -4,7 +4,8 @@ import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked } from '../ui/lib'
 
-const renderInput = ({ input, label, type, meta: { touched, error } }) => (
+function renderInput({ input, label, type, meta: { touched, error } }) {
+  return (
     <label>
       {label}
       <Input
@@ -17,7 +18,8 @@ const renderInput = ({ input, label, type, meta: { touched, error } }) => (
         size="small"
       />
     </label>
-)
+  )
+}
 
 const renderGender = ({ input, label, type, meta: { touched, error } }) => (
     <label>
@@ -54,7 +56,7 @@ const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, 
     fields.push({})
   }
 
-  console.log(counter)
+  // console.log(counter)
   return ( <ul>
     {fields.map((member, index) =>
       <li key={index}>
@@ -81,15 +83,15 @@ const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, 
               price="3150 ₽"
               index={index}
             />
-
-            <Field
-              name={`${member}.age`}
-              component={renderRadio}
-              label="infant"
-              title="Младенец"
-              price="Бесплатно"
-              index={index}
-            />
+            { ((counter && counter.infant < counter.adult) || counter === undefined) && <Field
+                name={`${member}.age`}
+                component={renderRadio}
+                label="infant"
+                title="Младенец"
+                price="Бесплатно"
+                index={index}
+              />
+            }
           </div>
         }
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length !== 0 && <div>
@@ -112,7 +114,6 @@ const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, 
 }
 
 function Forms(props) {
-  console.log(props)
   return (
     <div>
       <form>

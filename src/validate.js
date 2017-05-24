@@ -15,6 +15,7 @@ export const validateUser = (values) => {
 
 export const validatePassenger = (values) => {
   let errors = {}
+  console.log(values)
 
   if (!values.firstName) {
     errors.firstName = 'Required'
@@ -66,7 +67,8 @@ export const validatePassenger = (values) => {
       }
     })
     if(membersArrayErrors.length) {
-      errors.members = membersArrayErrors
+      // name component (member)
+      errors.member = membersArrayErrors
     }
   }
 
