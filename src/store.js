@@ -6,24 +6,38 @@ function parent(state={}, action) {
     return state;
 }
 
+function countCounter(member) {
+  let infant = 0
+  let adult = 1
+  let children = 0
+
+  member.forEach((passenger) => {
+    if (passenger.age === "infant") infant += 1
+    if (passenger.age === "adult") adult += 1
+    if (passenger.age === "children") children += 1
+  })
+  const total = infant + adult + children
+  return {infant, adult, children, total}
+}
+
 const rootReducer = combineReducers({
   form: formReducer.plugin({
     passengers: (state, action) => {
       switch(action.type) {
         case actionTypes.ARRAY_PUSH:
           const member = state.values.member
-          let infant = state.values.infant || 0
-          let adult = state.values.adult || 1
-          let children = state.values.children || 0
+          const counter = countCounter(member)
+          // fix total when add last passengers
+          if (counter.total === 8) {
+            counter.total += 1
+          } 
+          return {...state, values: {...state.values, counter: {...state.values.counter, ...counter }}}
 
-          member.forEach((passenger) => {
-            if (passenger.age === "infant") infant += 1
-            if (passenger.age === "adult") adult += 1
-            if (passenger.age === "children") children += 1
-          })
-          const total = infant + adult + children
+          case actionTypes.ARRAY_REMOVE:
+            const memberAll = state.values.member
+            const counterAll = countCounter(memberAll)
 
-          return {...state, values: {...state.values, counter: {...state.values.counter, total, adult, children, infant }}}
+            return {...state, values: {...state.values, counter: {...state.values.counter, ...counterAll }}}
 
         default:
           return state
