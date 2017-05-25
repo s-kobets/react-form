@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked } from '../ui/lib'
+import { selectInitialValues } from '../select'
 
 function renderInput({ input, label, type, meta: { touched, error } }) {
   return (
@@ -56,7 +57,7 @@ const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, 
     fields.push({})
   }
 
-  // console.log(counter)
+  console.log(counter)
   return ( <ul>
     {fields.map((member, index) =>
       <li key={index}>
@@ -143,8 +144,10 @@ const selector = formValueSelector('passengers')
 const mapStateToProps = (state) => {
   const memberAll = selector(state, 'member')
   const counter = selector(state, 'counter')
+  const initialValues = selectInitialValues
 
   return {
+     initialValues,
      memberAll,
      counter
   }
