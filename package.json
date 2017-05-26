@@ -6,6 +6,7 @@
     "@kupibilet/icons": "^3.3.0",
     "polished": "^1.1.2",
     "rc-collapse": "^1.7.5",
+    "rc-select": "^6.8.6",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",

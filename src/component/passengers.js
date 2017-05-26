@@ -1,9 +1,48 @@
 import React, { Component } from 'react';
+import Select, { Option, OptGroup } from 'rc-select';
+import 'rc-select/assets/index.css';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked } from '../ui/lib'
 import { selectInitialValues } from '../select'
+
+function renderSelect({ input, label, type, meta: { touched, error } }) {
+
+  const customSelect = ({children, input, input: {value, onChange, onFocus, onBlur}}) => (
+    <Select
+      {...input}
+      value={value || 'RU'}
+      onFocus={() => false}
+      onBlur={(value) => onBlur(value)}
+      onChange={(value) => onChange(value)}
+      defaultValue="Россия"
+      style={{ width: 100 }}
+      placeholder="placeholder"
+      optionFilterProp="desc"
+    >
+      {children}
+    </Select>
+  )
+
+  return (
+    <Field
+      name={input.name}
+      component={customSelect}
+      error={touched && error && true}
+      success={touched && !error && true}
+    >
+      <OptGroup label="СНГ">
+        <Option value="RU" desc="Россия">Россия</Option>
+        <Option value="RB" desc="Беларусь">Беларусь</Option>
+        <Option value="UA" desc="Украина">Украина</Option>
+      </OptGroup>
+      <OptGroup label="Азия">
+        <Option value="CH" desc="Китай">Китай</Option>
+      </OptGroup>
+    </Field>
+  )
+}
 
 function renderInput({ input, label, type, meta: { touched, error } }) {
   return (
@@ -120,6 +159,7 @@ function Forms(props) {
   return (
     <div>
       <form>
+        <Field name="citizenship" type="text" component={renderSelect} label="Гражданство"/>
         <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
         <Field name="lastName" type="text" component={renderInput} label="Имя"/>
         <Field name="gender" component={renderGender} label="Пол"></Field>
