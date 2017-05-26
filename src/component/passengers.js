@@ -52,12 +52,13 @@ const renderRadio = ({ input, label, title, price, index, meta: { touched, error
     />
 )
 
-const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, submitFailed }}) => {
+const renderPassengers = (props) => {
+  const { counter, memberAll, fields, meta: { touched, error, submitFailed }} = props
+
   function addPassenger() {
     fields.push({})
   }
 
-  console.log(counter)
   return ( <ul>
     {fields.map((member, index) =>
       <li key={index}>
@@ -114,6 +115,7 @@ const renderPassengers = ({ counter, memberAll, fields, meta: { touched, error, 
   )
 }
 
+// props to redux-form
 function Forms(props) {
   return (
     <div>

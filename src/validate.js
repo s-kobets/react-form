@@ -15,7 +15,6 @@ export const validateUser = (values) => {
 
 export const validatePassenger = (values) => {
   let errors = {}
-  console.log(values)
 
   if (!values.firstName) {
     errors.firstName = 'Required'
@@ -35,6 +34,8 @@ export const validatePassenger = (values) => {
 
   if (!values.birthday) {
     errors.birthday = 'Required'
+  } else if ((new Date().getFullYear() - Number(values.birthday.slice(0, 4))) < 12) {
+    errors.birthday = 'Взрослый должен быть не моложе 12 лет'
   }
 
   if (values.member) {
@@ -48,7 +49,6 @@ export const validatePassenger = (values) => {
       } else if (!/[a-zA-Z]$/i.test(member.firstName)) {
         memberErrors.firstName = 'только латинские буквы'
         membersArrayErrors[memberIndex] = memberErrors
-        console.log(member.firstName, memberErrors)
       }
       if (!member || !member.lastName) {
         memberErrors.lastName = 'Required'
@@ -63,6 +63,9 @@ export const validatePassenger = (values) => {
       }
       if (!member || !member.birthday) {
         memberErrors.birthday = 'Required'
+        membersArrayErrors[memberIndex] = memberErrors
+      } else if ((new Date().getFullYear() - Number(member.birthday.slice(0, 4))) < 12 && member.age === 'adult') {
+        memberErrors.birthday = 'Взрослый должен быть не моложе 12 лет'
         membersArrayErrors[memberIndex] = memberErrors
       }
     })
