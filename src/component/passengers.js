@@ -1,11 +1,77 @@
-import React, { Component } from 'react';
-import Select, { Option, OptGroup } from 'rc-select';
-import 'rc-select/assets/index.css';
-import { connect } from 'react-redux';
-import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
+import React, { Component } from 'react'
+import Select, { Option, OptGroup } from 'rc-select'
+import 'rc-select/assets/index.css'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
+import moment from 'moment'
+import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import { validatePassenger as validate } from '../validate'
-import { Input, BlockChecked } from '../ui/lib'
+import { Input, BlockChecked, ControlsGroup } from '../ui/lib'
 import { selectInitialValues } from '../select'
+
+const onlyNumberTwo = (value) => {
+  const number = value.replace(/[^\d]/g, '')
+  return number.slice(0,2)
+}
+
+const onlyNumberFour = (value) => {
+  const number = value.replace(/[^\d]/g, '')
+  return number.slice(0,4)
+}
+
+const InputDate = styled(Input)`
+  width: 42px;
+`
+
+const InputDateYear = styled(Input)`
+  width: 54px;
+`
+
+function wrapperDate(props) {
+  const { input, label, type, meta: { touched, error } } = props
+
+  return (
+    <label>
+      {label}
+      <InputDate
+        {...props}
+        {...input}
+        type={type}
+        placeholder="ДД"
+        errorText={touched && error && error}
+        error={touched && error && true}
+        success={touched && !error && true}
+        size="small"
+      />
+    </label>
+  )
+}
+
+function monthYearDate(props) {
+  const { input, label, type, meta: { touched, error } } = props
+
+  if (input.name === 'birthday-month') {
+    return (
+      <InputDate
+        {...props}
+        {...input}
+        type={type}
+        placeholder="MM"
+        size="small"
+      />
+    )
+  } else {
+    return (
+      <InputDateYear
+        {...props}
+        {...input}
+        type={type}
+        placeholder="ГГГГ"
+        size="small"
+      />
+    )
+  }
+}
 
 function renderSelect({ input, label, type, meta: { touched, error } }) {
 
@@ -140,7 +206,11 @@ const renderPassengers = (props) => {
             <Field name={`${member}.firstName`} type="text" component={renderInput} label="Фамилия"/>
             <Field name={`${member}.lastName`} type="text" component={renderInput} label="Имя"/>
             <Field name={`${member}.gender`} component={renderGender} label="Пол"></Field>
-            <Field name={`${member}.birthday`} type="date" component={renderInput} label="Возраст"></Field>
+            <ControlsGroup>
+              <Field name={`${member}.birthday-day`} type="number" component={wrapperDate} normalize={onlyNumberTwo} label="Дата рождения"></Field>
+              <Field name={`${member}.birthday-month`} type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
+              <Field name={`${member}.birthday-year`} type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
+            </ControlsGroup>
           </div>
         }
       </li>
@@ -163,7 +233,13 @@ function Forms(props) {
         <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
         <Field name="lastName" type="text" component={renderInput} label="Имя"/>
         <Field name="gender" component={renderGender} label="Пол"></Field>
-        <Field name="birthday" type="date" component={renderInput} label="Возраст"></Field>
+
+        <ControlsGroup>
+          <Field name="birthday-day" type="number" component={wrapperDate} normalize={onlyNumberTwo} label="Дата рождения"></Field>
+          <Field name="birthday-month" type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
+          <Field name="birthday-year" type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
+        </ControlsGroup>
+
         <FieldArray
           name="member"
           component={renderPassengers}

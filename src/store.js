@@ -24,6 +24,13 @@ const rootReducer = combineReducers({
   form: formReducer.plugin({
     passengers: (state, action) => {
       switch(action.type) {
+        case actionTypes.CHANGE:
+          const day = state.values['birthday-day'] || ''
+          const month = state.values['birthday-month'] || ''
+          const year = state.values['birthday-year'] || ''
+
+          const birthday = `${year}.${month}.${day}`
+          return {...state, values: {...state.values, birthday}}
         case actionTypes.ARRAY_PUSH:
           const member = state.values.member
           const counter = countCounter(member)

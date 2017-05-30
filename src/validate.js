@@ -32,10 +32,12 @@ export const validatePassenger = (values) => {
     errors.gender = 'Required'
   }
 
-  if (!values.birthday) {
-    errors.birthday = 'Required'
+
+  !values['birthday-day']
+  if (!values['birthday-day'] || !values['birthday-month'] || !values['birthday-year']) {
+    errors['birthday-day'] = 'Required'
   } else if ((new Date().getFullYear() - Number(values.birthday.slice(0, 4))) < 12) {
-    errors.birthday = 'Взрослый должен быть не моложе 12 лет'
+    errors['birthday-day'] = 'Взрослый должен быть не моложе 12 лет'
   }
 
   if (values.member) {
