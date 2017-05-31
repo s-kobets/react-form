@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
           const month = state.values['birthday-month'] || ''
           const year = state.values['birthday-year'] || ''
 
-          const birthday = `${year}.${month}.${day}`
+          const birthday = `${year}-${month}-${day}`
           return {...state, values: {...state.values, birthday}}
         case actionTypes.ARRAY_PUSH:
           const member = state.values.member

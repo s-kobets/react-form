@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const validateUser = (values) => {
   let errors = {}
   if (!values.email) {
@@ -32,11 +34,11 @@ export const validatePassenger = (values) => {
     errors.gender = 'Required'
   }
 
-
-  !values['birthday-day']
   if (!values['birthday-day'] || !values['birthday-month'] || !values['birthday-year']) {
     errors['birthday-day'] = 'Required'
-  } else if ((new Date().getFullYear() - Number(values.birthday.slice(0, 4))) < 12) {
+  } else if (values.birthday && !moment(values.birthday).isValid()) {
+    errors['birthday-day'] = 'Неверный формат даты'
+  } else if (moment(values.birthday).diff(moment().format('YYYY-MM-DD'), 'month') >= -144) {
     errors['birthday-day'] = 'Взрослый должен быть не моложе 12 лет'
   }
 
@@ -63,11 +65,14 @@ export const validatePassenger = (values) => {
         memberErrors.gender = 'Required'
         membersArrayErrors[memberIndex] = memberErrors
       }
-      if (!member || !member.birthday) {
-        memberErrors.birthday = 'Required'
+      if (!member || !member['birthday-day'] || !member['birthday-month'] || !member['birthday-year']) {
+        memberErrors['birthday-day'] = 'Required'
         membersArrayErrors[memberIndex] = memberErrors
-      } else if ((new Date().getFullYear() - Number(member.birthday.slice(0, 4))) < 12 && member.age === 'adult') {
-        memberErrors.birthday = 'Взрослый должен быть не моложе 12 лет'
+      } else if (!moment(`${member['birthday-year']}-${member['birthday-month']}-${member['birthday-day']}`).isValid()) {
+        memberErrors['birthday-day'] = 'Неверный формат даты'
+        membersArrayErrors[memberIndex] = memberErrors
+      } else if (moment(`${member['birthday-year']}-${member['birthday-month']}-${member['birthday-day']}`).diff(moment().format('YYYY-MM-DD'), 'month') >= -144 && member.age === 'adult') {
+        memberErrors['birthday-day'] = 'Взрослый должен быть не моложе 12 лет'
         membersArrayErrors[memberIndex] = memberErrors
       }
     })

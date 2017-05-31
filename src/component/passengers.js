@@ -3,7 +3,6 @@ import Select, { Option, OptGroup } from 'rc-select'
 import 'rc-select/assets/index.css'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import moment from 'moment'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked, ControlsGroup } from '../ui/lib'
@@ -31,19 +30,16 @@ function wrapperDate(props) {
   const { input, label, type, meta: { touched, error } } = props
 
   return (
-    <label>
-      {label}
-      <InputDate
-        {...props}
-        {...input}
-        type={type}
-        placeholder="ДД"
-        errorText={touched && error && error}
-        error={touched && error && true}
-        success={touched && !error && true}
-        size="small"
-      />
-    </label>
+    <InputDate
+      {...props}
+      {...input}
+      type={type}
+      placeholder="ДД"
+      errorText={touched && error && error}
+      error={touched && error && true}
+      success={touched && !error && true}
+      size="small"
+    />
   )
 }
 
@@ -206,11 +202,14 @@ const renderPassengers = (props) => {
             <Field name={`${member}.firstName`} type="text" component={renderInput} label="Фамилия"/>
             <Field name={`${member}.lastName`} type="text" component={renderInput} label="Имя"/>
             <Field name={`${member}.gender`} component={renderGender} label="Пол"></Field>
-            <ControlsGroup>
-              <Field name={`${member}.birthday-day`} type="number" component={wrapperDate} normalize={onlyNumberTwo} label="Дата рождения"></Field>
-              <Field name={`${member}.birthday-month`} type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
-              <Field name={`${member}.birthday-year`} type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
-            </ControlsGroup>
+            <label>
+              Дата рождения
+              <ControlsGroup>
+                  <Field name={`${member}.birthday-day`} type="number" component={wrapperDate} normalize={onlyNumberTwo}></Field>
+                  <Field name={`${member}.birthday-month`} type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
+                  <Field name={`${member}.birthday-year`} type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
+              </ControlsGroup>
+            </label>
           </div>
         }
       </li>
@@ -234,11 +233,14 @@ function Forms(props) {
         <Field name="lastName" type="text" component={renderInput} label="Имя"/>
         <Field name="gender" component={renderGender} label="Пол"></Field>
 
-        <ControlsGroup>
-          <Field name="birthday-day" type="number" component={wrapperDate} normalize={onlyNumberTwo} label="Дата рождения"></Field>
-          <Field name="birthday-month" type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
-          <Field name="birthday-year" type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
-        </ControlsGroup>
+        <label>
+          Дата рождения
+          <ControlsGroup>
+            <Field name="birthday-day" type="number" component={wrapperDate} normalize={onlyNumberTwo} label="Дата рождения"></Field>
+            <Field name="birthday-month" type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
+            <Field name="birthday-year" type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
+          </ControlsGroup>
+        </label>
 
         <FieldArray
           name="member"
