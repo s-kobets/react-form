@@ -5,16 +5,18 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import { validatePassenger as validate } from '../validate'
-import { Input, BlockChecked, ControlsGroup } from '../ui/lib'
+import { Input, BlockChecked, ControlsGroup, Label } from '../ui/lib'
 import { selectInitialValues } from '../select'
 
 const onlyNumberTwo = (value) => {
   const number = value.replace(/[^\d]/g, '')
+  console.log(number)
   return number.slice(0,2)
 }
 
 const onlyNumberFour = (value) => {
   const number = value.replace(/[^\d]/g, '')
+
   return number.slice(0,4)
 }
 
@@ -45,6 +47,7 @@ function wrapperDate(props) {
 
 function monthYearDate(props) {
   const { input, label, type, meta: { touched, error } } = props
+  console.log(45645, touched, error)
 
   if (input.name === 'birthday-month') {
     return (
@@ -108,8 +111,7 @@ function renderSelect({ input, label, type, meta: { touched, error } }) {
 
 function renderInput({ input, label, type, meta: { touched, error } }) {
   return (
-    <label>
-      {label}
+    <Label title={label}>
       <Input
         {...input}
         type={type}
@@ -119,13 +121,12 @@ function renderInput({ input, label, type, meta: { touched, error } }) {
         success={touched && !error && true}
         size="small"
       />
-    </label>
+    </Label>
   )
 }
 
 const renderGender = ({ input, label, type, meta: { touched, error } }) => (
-    <label>
-      {label}
+    <Label title={label}>
       <Field
         name={input.name}
         component="select"
@@ -136,7 +137,7 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
         <option value="male">M</option>
         <option value="female">Ж</option>
       </Field>
-    </label>
+    </Label>
 )
 
 const renderRadio = ({ input, label, title, price, index, meta: { touched, error } }) => (
@@ -154,7 +155,7 @@ const renderRadio = ({ input, label, title, price, index, meta: { touched, error
 )
 
 const renderPassengers = (props) => {
-  const { counter, memberAll, fields, meta: { touched, error, submitFailed }} = props
+  const { price, counter, memberAll, fields, meta: { touched, error, submitFailed }} = props
 
   function addPassenger() {
     fields.push({})
@@ -174,7 +175,7 @@ const renderPassengers = (props) => {
               component={renderRadio}
               label="adult"
               title="Взрослый"
-              price="3450 ₽"
+              price={price.adult}
               index={index}
             />
 
@@ -183,7 +184,7 @@ const renderPassengers = (props) => {
               component={renderRadio}
               label="children"
               title="Ребенок"
-              price="3150 ₽"
+              price={price.children}
               index={index}
             />
             { ((counter && counter.infant < counter.adult) || counter === undefined) && <Field
@@ -191,25 +192,24 @@ const renderPassengers = (props) => {
                 component={renderRadio}
                 label="infant"
                 title="Младенец"
-                price="Бесплатно"
+                price={price.infant}
                 index={index}
               />
             }
           </div>
         }
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length !== 0 && <div>
-            <h4>{memberAll[index].age}</h4>
+            <h4>{memberAll[index].age} {price[memberAll[index].age]}</h4>
             <Field name={`${member}.firstName`} type="text" component={renderInput} label="Фамилия"/>
             <Field name={`${member}.lastName`} type="text" component={renderInput} label="Имя"/>
             <Field name={`${member}.gender`} component={renderGender} label="Пол"></Field>
-            <label>
-              Дата рождения
+            <Label title="Дата рождения">
               <ControlsGroup>
                   <Field name={`${member}.birthday-day`} type="number" component={wrapperDate} normalize={onlyNumberTwo}></Field>
                   <Field name={`${member}.birthday-month`} type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
                   <Field name={`${member}.birthday-year`} type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
               </ControlsGroup>
-            </label>
+            </Label>
           </div>
         }
       </li>
@@ -233,21 +233,22 @@ function Forms(props) {
         <Field name="lastName" type="text" component={renderInput} label="Имя"/>
         <Field name="gender" component={renderGender} label="Пол"></Field>
 
-        <label>
-          Дата рождения
+        <Label title="Дата рождения">
           <ControlsGroup>
             <Field name="birthday-day" type="number" component={wrapperDate} normalize={onlyNumberTwo} label="Дата рождения"></Field>
             <Field name="birthday-month" type="number" component={monthYearDate} normalize={onlyNumberTwo}></Field>
             <Field name="birthday-year" type="number" component={monthYearDate} normalize={onlyNumberFour}></Field>
           </ControlsGroup>
-        </label>
+        </Label>
 
         <FieldArray
           name="member"
           component={renderPassengers}
           memberAll={props.memberAll}
           counter={props.counter}
+          price={props.price}
         />
+
       </form>
     </div>
   )
@@ -265,11 +266,17 @@ const mapStateToProps = (state) => {
   const memberAll = selector(state, 'member')
   const counter = selector(state, 'counter')
   const initialValues = selectInitialValues
+  const price = {
+    adult: '3450 ₽',
+    children: '3150 ₽',
+    infant: 'Бесплатно',
+  }
 
   return {
      initialValues,
      memberAll,
-     counter
+     counter,
+     price
   }
 }
 

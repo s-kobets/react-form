@@ -25,9 +25,9 @@ const rootReducer = combineReducers({
     passengers: (state, action) => {
       switch(action.type) {
         case actionTypes.CHANGE:
-          const day = state.values['birthday-day'] || ''
-          const month = state.values['birthday-month'] || ''
-          const year = state.values['birthday-year'] || ''
+          const day = (state.values && state.values['birthday-day']) || ''
+          const month = (state.values && state.values['birthday-month']) || ''
+          const year = (state.values && state.values['birthday-year']) || ''
 
           const birthday = `${year}-${month}-${day}`
           return {...state, values: {...state.values, birthday}}
@@ -37,7 +37,7 @@ const rootReducer = combineReducers({
           // fix total when add last passengers
           if (counter.total === 8) {
             counter.total += 1
-          } 
+          }
           return {...state, values: {...state.values, counter: {...state.values.counter, ...counter }}}
 
           case actionTypes.ARRAY_REMOVE:

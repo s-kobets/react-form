@@ -1,33 +1,9 @@
-import React, { Component } from 'react'
+import { getFormSyncErrors, SubmissionError } from 'redux-form'
 import { connect } from 'react-redux'
-import { getFormSyncErrors } from 'redux-form'
 
-class Button extends Component {
-    handleSubmit = () => {
-        console.log(this.props.syncErrorsUser, this.props.syncErrorsPassengers);
-    }
-
-    renderError() {
-        // this.props.syncErrorsPassengers
-        for (let value in this.props.syncErrorsUser) {
-            return (
-                <span>{value} - {this.props.syncErrorsUser[value]}</span>
-            )
-        }
-    } 
-
-    render() {
-        return (
-            <div>
-                <button 
-                    onClick={this.handleSubmit}
-                    disabled={ this.props.syncErrorsUser || this.props.syncErrorsPassengers ? true : false}
-                >
-                Submit</button>
-                <div>{this.renderError()}</div>
-            </div>
-        )
-    }
+function submit(props) {
+    console.log(props)
+    new SubmissionError(props.syncErrorsUser)
 }
 
 export default connect(
@@ -35,4 +11,4 @@ export default connect(
         syncErrorsUser: getFormSyncErrors('user')(state),
         syncErrorsPassengers: getFormSyncErrors('passengers')(state),
     })
-)(Button);
+)(submit);

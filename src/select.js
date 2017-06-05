@@ -1,6 +1,7 @@
 export const selectInitialValues = {
   // firstName: 'Jane',
   // lastName: 'Doe',
+  // gender: 'male',
   // member: [
   //   {
   //     age: "infant",

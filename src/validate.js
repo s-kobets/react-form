@@ -1,16 +1,15 @@
 import moment from 'moment'
+import validator from 'validator';
 
 export const validateUser = (values) => {
   let errors = {}
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  if (values.email && !validator.isEmail(values.email)) {
     errors.email = 'не верный email'
-  }
+  } 
 
-  if (!values.phone) {
-    errors.phone = 'Required'
-  }
+  if (values.phone && values.phone.replace(/[^\d]/g, '').length < 3){
+    errors.phone = 'Номер телефона не меньше 3 символов'
+  } 
 
   return errors
 }
@@ -20,13 +19,13 @@ export const validatePassenger = (values) => {
 
   if (!values.firstName) {
     errors.firstName = 'Required'
-  } else if (!/[a-zA-Z]$/i.test(values.firstName)) {
+  } else if (!validator.isAlpha(values.firstName)) {
     errors.firstName = 'только латинские буквы'
   }
 
   if (!values.lastName) {
     errors.lastName = 'Required'
-  } else if (!/[a-zA-Z]$/i.test(values.lastName)) {
+  } else if (!validator.isAlpha(values.lastName)) {
     errors.lastName = 'только латинские буквы'
   }
 
@@ -50,14 +49,14 @@ export const validatePassenger = (values) => {
       if (!member.firstName) {
         memberErrors.firstName = 'Required'
         membersArrayErrors[memberIndex] = memberErrors
-      } else if (!/[a-zA-Z]$/i.test(member.firstName)) {
+      } else if (!validator.isAlpha(member.firstName)) {
         memberErrors.firstName = 'только латинские буквы'
         membersArrayErrors[memberIndex] = memberErrors
       }
       if (!member || !member.lastName) {
         memberErrors.lastName = 'Required'
         membersArrayErrors[memberIndex] = memberErrors
-      } else if (!/[a-zA-Z]$/i.test(member.lastName)) {
+      } else if (!validator.isAlpha(member.lastName)) {
         memberErrors.lastName = 'только латинские буквы'
         membersArrayErrors[memberIndex] = memberErrors
       }

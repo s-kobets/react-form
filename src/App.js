@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import store from './store'
 import User from './component/user'
 import Passengers from './component/passengers'
-import Button from './component/submit'
+import Button from './component/button'
 
 class App extends Component {
   render() {    

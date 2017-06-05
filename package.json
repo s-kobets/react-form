@@ -6,6 +6,7 @@
     "@kupibilet/icons": "^3.3.0",
     "@kupibilet/react-dates": "~8.2.0",
     "@kupibilet/ui": "^1.4.12",
+    "cleave.js": "s-kobets/cleave.js",
     "moment": "^2.18.1",
     "polished": "^1.1.2",
     "rc-collapse": "^1.7.5",
@@ -17,7 +18,8 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",
     "redux-form": "^6.6.3",
-    "styled-components": "^1.4.6"
+    "styled-components": "^1.4.6",
+    "validator": "^7.0.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
