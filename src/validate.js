@@ -17,27 +17,20 @@ export const validateUser = (values) => {
 export const validatePassenger = (values) => {
   let errors = {}
 
-  if (!values.firstName) {
-    errors.firstName = 'Required'
-  } else if (!validator.isAlpha(values.firstName)) {
+  if (values.firstName && !validator.isAlpha(values.firstName)) {
     errors.firstName = 'только латинские буквы'
   }
 
-  if (!values.lastName) {
-    errors.lastName = 'Required'
-  } else if (!validator.isAlpha(values.lastName)) {
+  if (values.lastName && !validator.isAlpha(values.lastName)) {
     errors.lastName = 'только латинские буквы'
   }
 
-  if (!values.gender) {
-    errors.gender = 'Required'
-  }
-
-  if (!values['birthday-day'] || !values['birthday-month'] || !values['birthday-year']) {
-    errors['birthday-day'] = 'Required'
-  } else if (values.birthday && !moment(values.birthday).isValid()) {
+  // т.к. в дата формата 2000-11-11
+  if (values.birthday && values.birthday.length > 2 && !moment(values.birthday).isValid()) {
     errors['birthday-day'] = 'Неверный формат даты'
-  } else if (moment(values.birthday).diff(moment().format('YYYY-MM-DD'), 'month') >= -144) {
+  } else if (values.birthday && values.birthday.length < 10 && values.birthday.length > 2) {
+    errors['birthday-day'] = 'Не полная дата'
+  } else if (values.birthday && moment(values.birthday).diff(moment().format('YYYY-MM-DD'), 'month') >= -144) {
     errors['birthday-day'] = 'Взрослый должен быть не моложе 12 лет'
   }
 
@@ -46,31 +39,21 @@ export const validatePassenger = (values) => {
     values.member.forEach((member, memberIndex) => {
       let memberErrors = {}
 
-      if (!member.firstName) {
-        memberErrors.firstName = 'Required'
-        membersArrayErrors[memberIndex] = memberErrors
-      } else if (!validator.isAlpha(member.firstName)) {
+      if (member.firstName && !validator.isAlpha(member.firstName)) {
         memberErrors.firstName = 'только латинские буквы'
         membersArrayErrors[memberIndex] = memberErrors
       }
-      if (!member || !member.lastName) {
-        memberErrors.lastName = 'Required'
-        membersArrayErrors[memberIndex] = memberErrors
-      } else if (!validator.isAlpha(member.lastName)) {
+      if (member.lastName && !validator.isAlpha(member.lastName)) {
         memberErrors.lastName = 'только латинские буквы'
         membersArrayErrors[memberIndex] = memberErrors
       }
-      if (!member || !member.gender) {
-        memberErrors.gender = 'Required'
-        membersArrayErrors[memberIndex] = memberErrors
-      }
-      if (!member || !member['birthday-day'] || !member['birthday-month'] || !member['birthday-year']) {
-        memberErrors['birthday-day'] = 'Required'
-        membersArrayErrors[memberIndex] = memberErrors
-      } else if (!moment(`${member['birthday-year']}-${member['birthday-month']}-${member['birthday-day']}`).isValid()) {
+      if (member.birthday && member.birthday.length > 2 && !moment(member.birthday).isValid()) {
         memberErrors['birthday-day'] = 'Неверный формат даты'
         membersArrayErrors[memberIndex] = memberErrors
-      } else if (moment(`${member['birthday-year']}-${member['birthday-month']}-${member['birthday-day']}`).diff(moment().format('YYYY-MM-DD'), 'month') >= -144 && member.age === 'adult') {
+      } else if (member.birthday && member.birthday.length < 10 && member.birthday.length > 2) {
+        memberErrors['birthday-day'] = 'Не полная дата'
+        membersArrayErrors[memberIndex] = memberErrors
+      } else if (member.birthday && moment(member.birthday).diff(moment().format('YYYY-MM-DD'), 'month') >= -144) {
         memberErrors['birthday-day'] = 'Взрослый должен быть не моложе 12 лет'
         membersArrayErrors[memberIndex] = memberErrors
       }

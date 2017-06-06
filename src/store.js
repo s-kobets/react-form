@@ -28,9 +28,19 @@ const rootReducer = combineReducers({
           const day = (state.values && state.values['birthday-day']) || ''
           const month = (state.values && state.values['birthday-month']) || ''
           const year = (state.values && state.values['birthday-year']) || ''
-
           const birthday = `${year}-${month}-${day}`
-          return {...state, values: {...state.values, birthday}}
+
+          const memberNew = state.values.member.map((member, memberIndex) => {
+            const dayMember = member['birthday-day'] || ''
+            const monthMember = member['birthday-month'] || ''
+            const yearMember = member['birthday-year'] || ''
+            const birthdayMember = `${yearMember}-${monthMember}-${dayMember}`
+            return {
+              ...member,
+              birthday: birthdayMember,
+            }
+          })
+          return {...state, values: {...state.values, birthday, member: memberNew}}
         case actionTypes.ARRAY_PUSH:
           const member = state.values.member
           const counter = countCounter(member)

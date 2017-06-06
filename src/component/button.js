@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { getFormSyncErrors, SubmissionError, submit } from 'redux-form'
 
 export const onSubmit = (values) => {
+    console.log(values)
     if (!values.email) {
         throw new SubmissionError({
             email: 'Require',
@@ -13,6 +14,54 @@ export const onSubmit = (values) => {
             phone: 'Require',
         })
     }
+    if (!values.firstName) {
+        throw new SubmissionError({
+            firstName: 'Require',
+        })
+    }
+    if (!values.lastName) {
+        throw new SubmissionError({
+            lastName: 'Require',
+        })
+    }
+    if (!values.gender) {
+        throw new SubmissionError({
+            gender: 'Require',
+        })
+    }
+    if (!values['birthday-day'] || !values['birthday-month'] || !values['birthday-year']) {
+        throw new SubmissionError({
+            'birthday-day': 'Require',
+        })
+    }
+    if (values.member) {
+        let membersArrayErrors = []
+        values.member.forEach((member, memberIndex) => {
+            let memberErrors = {}
+            if (!member || !member.firstName) {
+                memberErrors.firstName = 'Required'
+                membersArrayErrors[memberIndex] = memberErrors
+            }
+            if (!member || !member.lastName) {
+                memberErrors.lastName = 'Required'
+                membersArrayErrors[memberIndex] = memberErrors
+            }
+            if (!member || !member.gender) {
+                memberErrors.gender = 'Required'
+                membersArrayErrors[memberIndex] = memberErrors
+            }
+            if (!member || !member['birthday-day'] || !member['birthday-month'] || !member['birthday-year']) {
+                memberErrors['birthday-day'] = 'Required'
+                membersArrayErrors[memberIndex] = memberErrors
+            }
+        })
+        if(membersArrayErrors.length) {
+            throw new SubmissionError({
+                member: membersArrayErrors,
+            })
+        }
+    }
+
     // console.log(this.props.syncErrorsUser, this.props.syncErrorsPassengers);
 }
 
@@ -29,6 +78,7 @@ class Button extends Component {
 
     handleSubmit = () => {
         this.props.dispatch(submit('user'))
+        this.props.dispatch(submit('passengers'))
     }
 
     render() {

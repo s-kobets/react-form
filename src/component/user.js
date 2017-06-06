@@ -7,6 +7,7 @@ import styled from 'styled-components'
 require(`cleave.js/dist/addons/cleave-phone.ru`)
 import {onSubmit} from './button'
 import { validateUser as validate } from '../validate'
+import { selectInitialValues } from '../select'
 
 const WrapperInputTelephone = styled.div`
   position: relative;
@@ -73,13 +74,12 @@ const InputLine = styled.span`
   background-color: ${(props) => (props.error ? 'red' : 'green')};
 `
 
-const renderCleave = ({ input, label, type, meta: { touched, error, valid } }) => {
+const renderCleave = (props) => {
+  const { input, label, type, meta: { touched, error, initial } } = props
   const bugaga = (event) => {
-    console.log(event.target)
   }
 
   return (
-    console.log(touched, error),
     <Label title={label}>
       <WrapperInputTelephone>
         <InputTelephone
@@ -90,9 +90,9 @@ const renderCleave = ({ input, label, type, meta: { touched, error, valid } }) =
           onChange={bugaga}
         />
         {
-          (touched && (error || valid)) && <InputLine
+          ((touched && (error || input.value.length > 0)) || (initial && initial.length > 0)) && <InputLine
             error={touched && error}
-            success={touched && valid}
+            success={touched && input.value.length > 0}
             className="input-line"
           />
         }
@@ -104,7 +104,10 @@ const renderCleave = ({ input, label, type, meta: { touched, error, valid } }) =
   )
 }
 
-const renderInput = ({ input, label, type, meta: { touched, error, valid } }) => (
+const renderInput = (props) => {
+  const { input, label, type, meta: { touched, error, initial } } = props
+
+  return (
     <Label title={label}>
       <Input
         {...input}
@@ -112,11 +115,12 @@ const renderInput = ({ input, label, type, meta: { touched, error, valid } }) =>
         placeholder={label}
         errorText={touched && error && error}
         error={touched && error && true}
-        success={touched && valid}
+        success={(touched && input.value.length > 0) || (initial && initial.length > 0)}
         size="small"
       />
     </Label>
-)
+  )
+}
 
 class Forms extends Component {
   render() {
@@ -140,4 +144,11 @@ const reduxForms = reduxForm({
   onSubmit,
 })(Forms);
 
-export default connect()(reduxForms);
+const mapStateToProps = (state) => {
+  const initialValues = selectInitialValues
+  return {
+    initialValues,
+  }
+}
+
+export default connect(mapStateToProps)(reduxForms);

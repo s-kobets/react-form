@@ -7,16 +7,15 @@ import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked, ControlsGroup, Label } from '../ui/lib'
 import { selectInitialValues } from '../select'
+import {onSubmit} from './button'
 
 const onlyNumberTwo = (value) => {
   const number = value.replace(/[^\d]/g, '')
-  console.log(number)
   return number.slice(0,2)
 }
 
 const onlyNumberFour = (value) => {
   const number = value.replace(/[^\d]/g, '')
-
   return number.slice(0,4)
 }
 
@@ -39,7 +38,7 @@ function wrapperDate(props) {
       placeholder="ДД"
       errorText={touched && error && error}
       error={touched && error && true}
-      success={touched && !error && true}
+      success={!error && input.value.length > 0}
       size="small"
     />
   )
@@ -47,7 +46,6 @@ function wrapperDate(props) {
 
 function monthYearDate(props) {
   const { input, label, type, meta: { touched, error } } = props
-  console.log(45645, touched, error)
 
   if (input.name === 'birthday-month') {
     return (
@@ -118,7 +116,7 @@ function renderInput({ input, label, type, meta: { touched, error } }) {
         placeholder={label}
         errorText={touched && error && error}
         error={touched && error && true}
-        success={touched && !error && true}
+        success={input.value.length > 0}
         size="small"
       />
     </Label>
@@ -225,9 +223,11 @@ const renderPassengers = (props) => {
 
 // props to redux-form
 function Forms(props) {
+  const {handleSubmit} = props
+
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Field name="citizenship" type="text" component={renderSelect} label="Гражданство"/>
         <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
         <Field name="lastName" type="text" component={renderInput} label="Имя"/>
@@ -257,7 +257,8 @@ function Forms(props) {
 // Decorate the form component
 const reduxForms = reduxForm({
   form: 'passengers',
-  validate
+  validate,
+  onSubmit,
 })(Forms);
 
 const selector = formValueSelector('passengers')
