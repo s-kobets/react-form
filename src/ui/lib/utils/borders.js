@@ -1,8 +1,3 @@
-"use strict";
+export var borderSmall = "\n  border-radius: 3px;\n";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var borderSmall = exports.borderSmall = "\n  border-radius: 3px;\n";
-
-var borderLarge = exports.borderLarge = "\n  border-radius: 6px;\n";
+export var borderLarge = "\n  border-radius: 6px;\n";

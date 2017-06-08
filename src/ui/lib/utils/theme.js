@@ -1,9 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var getThemeColor = exports.getThemeColor = function getThemeColor(theme, colorKey) {
+export var getThemeColor = function getThemeColor(theme, colorKey) {
   var fallbackColor = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'transparent';
 
   if (process.env.NODE_ENV === 'production' && colorKey && !(colorKey in theme.color)) {
@@ -14,7 +9,7 @@ var getThemeColor = exports.getThemeColor = function getThemeColor(theme, colorK
   return theme.color[colorKey] || fallbackColor;
 };
 
-var ThemingPropTypes = exports.ThemingPropTypes = {
+export var ThemingPropTypes = {
   themeColor: function themeColor(props, propName, componentName) {
     var value = props[propName];
 

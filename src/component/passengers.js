@@ -5,18 +5,22 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import { validatePassenger as validate } from '../validate'
-import { Input, BlockChecked, ControlsGroup, Label } from '../ui/lib'
+import { Input, BlockChecked, ControlsGroup, Label, ThemeProvider } from '../ui/lib'
 import { selectInitialValues } from '../select'
 import {onSubmit} from './button'
 
 const onlyNumberTwo = (value) => {
-  const number = value.replace(/[^\d]/g, '')
-  return number.slice(0,2)
+  if (value !== undefined) {
+    const number = value.replace(/[^\d]/g, '')
+    return number.slice(0,2)
+  }
 }
 
 const onlyNumberFour = (value) => {
-  const number = value.replace(/[^\d]/g, '')
-  return number.slice(0,4)
+  if (value !== undefined) {
+    const number = value.replace(/[^\d]/g, '')
+    return number.slice(0,4)
+  }
 }
 
 const InputDate = styled(Input)`
@@ -34,10 +38,8 @@ function wrapperDate(props) {
     <InputDate
       {...props}
       {...input}
-      type={type}
       placeholder="ДД"
-      errorText={touched && error && error}
-      error={touched && error && true}
+      error={touched && error && error}
       success={!error && input.value.length > 0}
       size="small"
     />
@@ -45,14 +47,13 @@ function wrapperDate(props) {
 }
 
 function monthYearDate(props) {
-  const { input, label, type, meta: { touched, error } } = props
+  const { input, label, meta: { touched, error } } = props
 
   if (input.name === 'birthday-month') {
     return (
       <InputDate
         {...props}
         {...input}
-        type={type}
         placeholder="MM"
         size="small"
       />
@@ -62,7 +63,6 @@ function monthYearDate(props) {
       <InputDateYear
         {...props}
         {...input}
-        type={type}
         placeholder="ГГГГ"
         size="small"
       />
@@ -70,23 +70,44 @@ function monthYearDate(props) {
   }
 }
 
+const SelectStyle = styled(Select)`
+  ${styled(Input)}
+`
+
+const InputLine = styled.span`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 2px;
+  border-radius: 3px 0 0 3px;
+  background-color: ${({ success }) => (success ? 'green' : 'red')} 
+`
+
 function renderSelect({ input, label, type, meta: { touched, error } }) {
 
-  const customSelect = ({children, input, input: {value, onChange, onFocus, onBlur}}) => (
-    <Select
-      {...input}
-      value={value || 'RU'}
-      onFocus={() => false}
-      onBlur={(value) => onBlur(value)}
-      onChange={(value) => onChange(value)}
-      defaultValue="Россия"
-      style={{ width: 100 }}
-      placeholder="placeholder"
-      optionFilterProp="desc"
-    >
-      {children}
-    </Select>
-  )
+  const customSelect = (props) => {
+    const {children, input, input: {value, onChange, onFocus, onBlur}} = props
+
+    return (
+      <div style={{position: 'relative', display: 'inline-block'}}>
+        <SelectStyle
+          {...props}
+          {...input}
+          value={value || 'RU'}
+          onFocus={() => false}
+          onBlur={(value) => onBlur(value)}
+          onChange={(value) => onChange(value)}
+          defaultValue="Россия"
+          style={{ width: 100 }}
+          placeholder="placeholder"
+          optionFilterProp="desc"
+        >
+          {children}
+        </SelectStyle>
+      </div>
+    )
+  }
 
   return (
     <Field
@@ -107,16 +128,17 @@ function renderSelect({ input, label, type, meta: { touched, error } }) {
   )
 }
 
-function renderInput({ input, label, type, meta: { touched, error } }) {
+function renderInput(props) {
+  const { input, label, type, meta: { touched, error } } = props
+
   return (
     <Label title={label}>
       <Input
+        {...props}
         {...input}
-        type={type}
         placeholder={label}
-        errorText={touched && error && error}
-        error={touched && error && true}
-        success={input.value.length > 0}
+        error={touched && error && error}
+        success={!error && input.value.length > 0}
         size="small"
       />
     </Label>
@@ -128,7 +150,7 @@ const renderGender = ({ input, label, type, meta: { touched, error } }) => (
       <Field
         name={input.name}
         component="select"
-        error={touched && error && true}
+        error={touched && error && error}
         success={touched && !error && true}
       >
         <option></option>
@@ -146,8 +168,7 @@ const renderRadio = ({ input, label, title, price, index, meta: { touched, error
       title={title}
       value={label}
       price={price}
-      errorText={touched && error && error}
-      error={touched && error && true}
+      error={touched && error && error}
       success={touched && !error && true}
     />
 )
@@ -226,7 +247,7 @@ function Forms(props) {
   const {handleSubmit} = props
 
   return (
-    <div>
+    <ThemeProvider>
       <form onSubmit={handleSubmit}>
         <Field name="citizenship" type="text" component={renderSelect} label="Гражданство"/>
         <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
@@ -250,7 +271,7 @@ function Forms(props) {
         />
 
       </form>
-    </div>
+    </ThemeProvider>
   )
 }
 

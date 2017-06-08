@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
           const year = (state.values && state.values['birthday-year']) || ''
           const birthday = `${year}-${month}-${day}`
 
-          const memberNew = state.values.member.map((member, memberIndex) => {
+          const memberNew = state.values.member && state.values.member.map((member, memberIndex) => {
             const dayMember = member['birthday-day'] || ''
             const monthMember = member['birthday-month'] || ''
             const yearMember = member['birthday-year'] || ''

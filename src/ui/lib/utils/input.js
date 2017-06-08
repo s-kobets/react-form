@@ -1,15 +1,9 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = sizeInput;
-function sizeInput(size, SIZE, customNumber, attr) {
+export default function sizeInput(size, SIZE, value, attr) {
   if (attr === 'height') {
-    return '' + (SIZE[size] * 2 + customNumber * 2);
+    return SIZE[size] * 2 + value * 2 + 4 + 'px';
   }
   if (attr === 'padding') {
-    return '' + SIZE[size];
+    return SIZE[size] + 'px';
   }
-  return '\n      padding-left: ' + SIZE[size] + 'px\n      padding-right: ' + SIZE[size] + 'px\n      height: ' + (SIZE[size] * 2 + customNumber * 2) + 'px\n    ';
+  return '\n      padding-left: ' + SIZE[size] + 'px\n      padding-right: ' + SIZE[size] + 'px\n      height: ' + (SIZE[size] * 2 + value * 2 + 4) + 'px\n    ';
 }

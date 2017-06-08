@@ -1,8 +1,3 @@
-"use strict";
+export var time = 0.15;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var time = exports.time = 0.15;
-
-var switchTransition = exports.switchTransition = "\n  transition: " + time + "s ease-out;\n";
+export var switchTransition = "\n  transition: " + time + "s ease-out;\n";

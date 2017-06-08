@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { Input, Label } from '../ui/lib'
+import { Input, Label, ThemeProvider } from '../ui/lib'
 import Cleave from 'cleave.js/react'
 import styled from 'styled-components'
 require(`cleave.js/dist/addons/cleave-phone.ru`)
@@ -76,7 +76,11 @@ const InputLine = styled.span`
 
 const renderCleave = (props) => {
   const { input, label, type, meta: { touched, error, initial } } = props
+  let telephone = ''
+
   const bugaga = (event) => {
+    telephone = event.target.rawValue
+    console.log(String.fromCharCode(event.keyCode || event.charCode))
   }
 
   return (
@@ -85,9 +89,8 @@ const renderCleave = (props) => {
         <InputTelephone
           {...input}
           options={{phone: true, phoneRegionCode: 'RU'}}
-          errorText={touched && error && error}
           error={touched && error && true}
-          onChange={bugaga}
+          onKeyPress={bugaga}
         />
         {
           ((touched && (error || input.value.length > 0)) || (initial && initial.length > 0)) && <InputLine
@@ -110,12 +113,11 @@ const renderInput = (props) => {
   return (
     <Label title={label}>
       <Input
+        {...props}
         {...input}
-        type={type}
         placeholder={label}
-        errorText={touched && error && error}
-        error={touched && error && true}
-        success={(touched && input.value.length > 0) || (initial && initial.length > 0)}
+        error={touched && error && error}
+        success={!error && ((touched && input.value.length > 0) || (initial && initial.length > 0))}
         size="small"
       />
     </Label>
@@ -127,12 +129,12 @@ class Forms extends Component {
     const {handleSubmit} = this.props
 
     return (
-      <div>
+      <ThemeProvider>
         <form onSubmit={handleSubmit}>
           <Field name="email" type="email" component={renderInput} label="Электронная почта" />
           <Field name="phone" component={renderCleave} label="Телефон" />
         </form>
-      </div>
+      </ThemeProvider>
     )
   }
 }
