@@ -22,9 +22,10 @@ function countCounter(member) {
 
 function translitInput(value) {
   if (value && !validator.isAlpha(value)) {
-    return transliterate(value)
-  } else {
-    return value
+    let returnValue = transliterate(value.toLowerCase())
+    return returnValue.toUpperCase()
+  } else if (value){
+    return value.toUpperCase()
   }
 }
 
