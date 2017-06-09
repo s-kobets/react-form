@@ -1,8 +1,9 @@
 import moment from 'moment'
-import validator from 'validator';
+import validator from 'validator'
 
-export const validateUser = (values) => {
+export const validatePassenger = (values) => {
   let errors = {}
+  
   if (values.email && !validator.isEmail(values.email)) {
     errors.email = 'не верный email'
   } 
@@ -10,21 +11,6 @@ export const validateUser = (values) => {
   if (values.phone && values.phone.replace(/[^\d]/g, '').length < 3){
     errors.phone = 'Номер телефона не меньше 3 символов'
   } 
-
-  return errors
-}
-
-export const validatePassenger = (values) => {
-  let errors = {}
-
-  if (values.firstName && !validator.isAlpha(values.firstName)) {
-    errors.firstName = 'только латинские буквы'
-  }
-
-  if (values.lastName && !validator.isAlpha(values.lastName)) {
-    errors.lastName = 'только латинские буквы'
-  }
-
   // т.к. в дата формата 2000-11-11
   if (values.birthday && values.birthday.length > 2 && !moment(values.birthday).isValid()) {
     errors['birthday-day'] = 'Неверный формат даты'
@@ -39,14 +25,6 @@ export const validatePassenger = (values) => {
     values.member.forEach((member, memberIndex) => {
       let memberErrors = {}
 
-      if (member.firstName && !validator.isAlpha(member.firstName)) {
-        memberErrors.firstName = 'только латинские буквы'
-        membersArrayErrors[memberIndex] = memberErrors
-      }
-      if (member.lastName && !validator.isAlpha(member.lastName)) {
-        memberErrors.lastName = 'только латинские буквы'
-        membersArrayErrors[memberIndex] = memberErrors
-      }
       if (member.birthday && member.birthday.length > 2 && !moment(member.birthday).isValid()) {
         memberErrors['birthday-day'] = 'Неверный формат даты'
         membersArrayErrors[memberIndex] = memberErrors

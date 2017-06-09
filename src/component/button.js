@@ -77,7 +77,6 @@ class Button extends Component {
     }
 
     handleSubmit = () => {
-        this.props.dispatch(submit('user'))
         this.props.dispatch(submit('passengers'))
     }
 
@@ -99,7 +98,6 @@ class Button extends Component {
 
 export default connect(
     state => ({
-        syncErrorsUser: getFormSyncErrors('user')(state),
         syncErrorsPassengers: getFormSyncErrors('passengers')(state),
     })
 )(Button);

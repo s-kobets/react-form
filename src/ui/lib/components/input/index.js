@@ -236,7 +236,6 @@ var InputComponent = function (_Component) {
           leftIcon = _props.leftIcon,
           rightIcon = _props.rightIcon;
 
-        console.log(123123123, error)
       return React.createElement(
         InputWrap,
         {

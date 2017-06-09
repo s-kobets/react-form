@@ -8,6 +8,26 @@ import { validatePassenger as validate } from '../validate'
 import { Input, BlockChecked, ControlsGroup, Label, ThemeProvider } from '../ui/lib'
 import { selectInitialValues } from '../select'
 import {onSubmit} from './button'
+import {renderCleave, renderInputEmail} from './user'
+
+console.log(32423423423, renderInputEmail)
+function renderInput(props) {
+
+  const { input, label, meta: { touched, error } } = props
+
+  return (
+    <Label title={label}>
+      <Input
+        {...props}
+        {...input}
+        placeholder={label}
+        error={touched && error && error}
+        success={!error && input.value.length > 0}
+        size="small"
+      />
+    </Label>
+  )
+}
 
 const onlyNumberTwo = (value) => {
   if (value !== undefined) {
@@ -70,9 +90,7 @@ function monthYearDate(props) {
   }
 }
 
-const SelectStyle = styled(Select)`
-  ${styled(Input)}
-`
+const SelectStyled = styled(Select)``
 
 const InputLine = styled.span`
   position: absolute;
@@ -86,25 +104,36 @@ const InputLine = styled.span`
 
 function renderSelect({ input, label, type, meta: { touched, error } }) {
 
+  let isDropdown = false
+
+  const onToggle = () => {
+    isDropdown = !isDropdown
+  }
+
+  const renderGetInput = () => (
+    <input className='xyu' placeholder="xyu" style={{border: '1px solid red'}}/>
+  )
+
   const customSelect = (props) => {
     const {children, input, input: {value, onChange, onFocus, onBlur}} = props
 
     return (
       <div style={{position: 'relative', display: 'inline-block'}}>
-        <SelectStyle
+        <SelectStyled
           {...props}
           {...input}
           value={value || 'RU'}
-          onFocus={() => false}
+          onFocus={(value) => onFocus(value)}
           onBlur={(value) => onBlur(value)}
           onChange={(value) => onChange(value)}
           defaultValue="Россия"
           style={{ width: 100 }}
           placeholder="placeholder"
-          optionFilterProp="desc"
+          showArrow={false}
+          getInputElement={renderGetInput}
         >
           {children}
-        </SelectStyle>
+        </SelectStyled>
       </div>
     )
   }
@@ -125,23 +154,6 @@ function renderSelect({ input, label, type, meta: { touched, error } }) {
         <Option value="CH" desc="Китай">Китай</Option>
       </OptGroup>
     </Field>
-  )
-}
-
-function renderInput(props) {
-  const { input, label, type, meta: { touched, error } } = props
-
-  return (
-    <Label title={label}>
-      <Input
-        {...props}
-        {...input}
-        placeholder={label}
-        error={touched && error && error}
-        success={!error && input.value.length > 0}
-        size="small"
-      />
-    </Label>
   )
 }
 
@@ -249,6 +261,11 @@ function Forms(props) {
   return (
     <ThemeProvider>
       <form onSubmit={handleSubmit}>
+        <div>
+          <Field name="email" type="email" component={renderInputEmail} label="Электронная почта" />
+          <Field name="phone" component={renderCleave} label="Телефон" />
+        </div>
+
         <Field name="citizenship" type="text" component={renderSelect} label="Гражданство"/>
         <Field name="firstName" type="text" component={renderInput} label="Фамилия"/>
         <Field name="lastName" type="text" component={renderInput} label="Имя"/>

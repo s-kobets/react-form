@@ -74,7 +74,7 @@ const InputLine = styled.span`
   background-color: ${(props) => (props.error ? 'red' : 'green')};
 `
 
-const renderCleave = (props) => {
+export const renderCleave = (props) => {
   const { input, label, type, meta: { touched, error, initial } } = props
   let telephone = ''
 
@@ -107,8 +107,8 @@ const renderCleave = (props) => {
   )
 }
 
-const renderInput = (props) => {
-  const { input, label, type, meta: { touched, error, initial } } = props
+export const renderInputEmail = (props) => {
+  const { input, label, meta: { touched, error, initial } } = props
 
   return (
     <Label title={label}>
@@ -123,34 +123,3 @@ const renderInput = (props) => {
     </Label>
   )
 }
-
-class Forms extends Component {
-  render() {
-    const {handleSubmit} = this.props
-
-    return (
-      <ThemeProvider>
-        <form onSubmit={handleSubmit}>
-          <Field name="email" type="email" component={renderInput} label="Электронная почта" />
-          <Field name="phone" component={renderCleave} label="Телефон" />
-        </form>
-      </ThemeProvider>
-    )
-  }
-}
-
-// Decorate the form component
-const reduxForms = reduxForm({
-  form: 'user',
-  validate,
-  onSubmit,
-})(Forms);
-
-const mapStateToProps = (state) => {
-  const initialValues = selectInitialValues
-  return {
-    initialValues,
-  }
-}
-
-export default connect(mapStateToProps)(reduxForms);

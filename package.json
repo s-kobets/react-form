@@ -19,6 +19,7 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-form": "^6.6.3",
     "styled-components": "2.0.1",
+    "translitit-engine": "^0.1.1",
     "validator": "^7.0.0"
   },
   "devDependencies": {

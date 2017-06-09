@@ -1,10 +1,10 @@
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { createStore, combineReducers } from 'redux'
 import { reducer as formReducer, actionTypes } from 'redux-form'
-
-function parent(state={}, action) {
-    return state;
-}
+import translitEngine from 'translitit-engine'
+import translitLatin from './translitLatin'
+import validator from 'validator'
+const transliterate = translitEngine(translitLatin)
 
 function countCounter(member) {
   let infant = 0
@@ -20,17 +20,41 @@ function countCounter(member) {
   return {infant, adult, children, total}
 }
 
+function translitInput(value) {
+  if (value && !validator.isAlpha(value)) {
+    return transliterate(value)
+  } else {
+    return value
+  }
+}
+
 const rootReducer = combineReducers({
   form: formReducer.plugin({
     passengers: (state, action) => {
       switch(action.type) {
+        case actionTypes.BLUR:
+          let firstName = translitInput(state.values.firstName)
+          let lastName = translitInput(state.values.lastName)
+
+          const memberTranslate = state.values.member && state.values.member.map((member) => {
+            let firstNameMember = translitInput(member.firstName)
+            let lastNameMember = translitInput(member.lastName)
+
+            return {
+              ...member,
+              firstName: firstNameMember,
+              lastName: lastNameMember
+            }
+          })
+          
+          return {...state, values:{...state.values, firstName, member: memberTranslate}}
         case actionTypes.CHANGE:
           const day = (state.values && state.values['birthday-day']) || ''
           const month = (state.values && state.values['birthday-month']) || ''
           const year = (state.values && state.values['birthday-year']) || ''
           const birthday = `${year}-${month}-${day}`
 
-          const memberNew = state.values.member && state.values.member.map((member, memberIndex) => {
+          const memberNew = state.values.member && state.values.member.map((member) => {
             const dayMember = member['birthday-day'] || ''
             const monthMember = member['birthday-month'] || ''
             const yearMember = member['birthday-year'] || ''
@@ -50,18 +74,17 @@ const rootReducer = combineReducers({
           }
           return {...state, values: {...state.values, counter: {...state.values.counter, ...counter }}}
 
-          case actionTypes.ARRAY_REMOVE:
-            const memberAll = state.values.member
-            const counterAll = countCounter(memberAll)
+        case actionTypes.ARRAY_REMOVE:
+          const memberAll = state.values.member
+          const counterAll = countCounter(memberAll)
 
-            return {...state, values: {...state.values, counter: {...state.values.counter, ...counterAll }}}
+          return {...state, values: {...state.values, counter: {...state.values.counter, ...counterAll }}}
 
         default:
           return state
       }
     }
-  }),
-  parent,
+  })
 });
 
 const store = createStore(rootReducer, composeWithDevTools());
