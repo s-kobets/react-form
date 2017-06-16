@@ -48,7 +48,7 @@ const rootReducer = combineReducers({
             }
           })
           
-          return {...state, values:{...state.values, firstName, member: memberTranslate}}
+          return {...state, values:{...state.values, firstName, lastName, member: memberTranslate}}
         case actionTypes.CHANGE:
           const day = (state.values && state.values['birthday-day']) || ''
           const month = (state.values && state.values['birthday-month']) || ''

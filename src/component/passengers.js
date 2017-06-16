@@ -10,9 +10,7 @@ import { selectInitialValues } from '../select'
 import {onSubmit} from './button'
 import {renderCleave, renderInputEmail} from './user'
 
-console.log(32423423423, renderInputEmail)
 function renderInput(props) {
-
   const { input, label, meta: { touched, error } } = props
 
   return (
@@ -53,6 +51,7 @@ const InputDateYear = styled(Input)`
 
 function wrapperDate(props) {
   const { input, label, type, meta: { touched, error } } = props
+  const value = input.value.replace(/(^|\s)0/g, '$1')
 
   return (
     <InputDate
@@ -90,7 +89,9 @@ function monthYearDate(props) {
   }
 }
 
-const SelectStyled = styled(Select)``
+const SelectStyled = styled(Select)`
+  border: none;
+`
 
 const InputLine = styled.span`
   position: absolute;
@@ -101,36 +102,46 @@ const InputLine = styled.span`
   border-radius: 3px 0 0 3px;
   background-color: ${({ success }) => (success ? 'green' : 'red')} 
 `
+function renderSelect({ children, input, label, type, meta: { touched, error } }) {
+  // props from select
+  const RenderGetInput = (props) => {
+    console.log(12314142, props)
+    //  isDropdown={false} 
 
-function renderSelect({ input, label, type, meta: { touched, error } }) {
-
-  let isDropdown = false
-
-  const onToggle = () => {
-    isDropdown = !isDropdown
+    return (
+      <Input
+        {...props}
+        error={touched && error && error}
+        success={!error}
+        className="has-badge"
+        type="text"
+        name="input"
+        size="small"
+        placeholder="Гражданство"
+        positioDropdown="right"
+      />
+    )
   }
 
-  const renderGetInput = () => (
-    <input className='xyu' placeholder="xyu" style={{border: '1px solid red'}}/>
-  )
-
-  const customSelect = (props) => {
-    const {children, input, input: {value, onChange, onFocus, onBlur}} = props
-
+  const CustomSelect = (props) => {
+    const {children} = props
+    // props.onFocus открывает и тутже закрывает (баг)
     return (
       <div style={{position: 'relative', display: 'inline-block'}}>
         <SelectStyled
-          {...props}
           {...input}
-          value={value || 'RU'}
-          onFocus={(value) => onFocus(value)}
-          onBlur={(value) => onBlur(value)}
-          onChange={(value) => onChange(value)}
+          value={input.value || 'RU'}
+          onFocus={() => false}
+          onBlur={(value) => input.onBlur(value)}
+          onChange={(value) => input.onChange(value)}
           defaultValue="Россия"
-          style={{ width: 100 }}
           placeholder="placeholder"
+          getInputElement={() => <RenderGetInput />}
           showArrow={false}
-          getInputElement={renderGetInput}
+          notFoundContent=""
+          filterOption={false}
+          defaultActiveFirstOption={false}
+          combobox
         >
           {children}
         </SelectStyled>
@@ -139,12 +150,7 @@ function renderSelect({ input, label, type, meta: { touched, error } }) {
   }
 
   return (
-    <Field
-      name={input.name}
-      component={customSelect}
-      error={touched && error && true}
-      success={touched && !error && true}
-    >
+    <CustomSelect>
       <OptGroup label="СНГ">
         <Option value="RU" desc="Россия">Россия</Option>
         <Option value="RB" desc="Беларусь">Беларусь</Option>
@@ -153,7 +159,7 @@ function renderSelect({ input, label, type, meta: { touched, error } }) {
       <OptGroup label="Азия">
         <Option value="CH" desc="Китай">Китай</Option>
       </OptGroup>
-    </Field>
+    </CustomSelect>
   )
 }
 
