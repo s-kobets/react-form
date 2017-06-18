@@ -5,10 +5,22 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import { validatePassenger as validate } from '../validate'
-import { Input, BlockChecked, ControlsGroup, Label, ThemeProvider } from '../ui/lib'
+import { Input,
+  BlockChecked,
+  ControlsGroup,
+  Label,
+  ThemeProvider,
+  Button,
+  Icon,
+ } from '../ui/lib'
 import { selectInitialValues } from '../select'
 import {onSubmit} from './button'
 import {renderCleave, renderInputEmail} from './user'
+
+
+const Close = styled(Icon)`
+  transform: rotate(45deg);
+`
 
 function renderInput(props) {
   const { input, label, meta: { touched, error } } = props
@@ -201,11 +213,10 @@ const renderPassengers = (props) => {
   return ( <ul>
     {fields.map((member, index) =>
       <li key={index}>
-        <button
-          type="button"
-          title="Remove Member"
+        <Button
           onClick={() => fields.remove(index)}
-        >x</button>
+          rightIcon={<Close name="plus" size="small" stroke="miscDark" fill="miscDark" />}
+        />
         { memberAll && memberAll[index] && Object.keys(memberAll[index]).length === 0 && <div>
             <Field
               name={`${member}.age`}
@@ -252,7 +263,13 @@ const renderPassengers = (props) => {
       </li>
     )}
     { ((counter && counter.total < 9) || counter === undefined) && <li>
-        <button type="button" onClick={addPassenger}>+ Member</button>
+        <Button
+          onClick={addPassenger}
+          rightIcon={<Icon name="plus" size="small" stroke="background" fill="background" />}
+        >
+          Добавить пассажира
+          
+        </Button>
         {(touched || submitFailed) && error && <span>{error}</span>}
       </li>
     }

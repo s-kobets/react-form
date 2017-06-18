@@ -32,14 +32,17 @@ function translitInput(value) {
 const rootReducer = combineReducers({
   form: formReducer.plugin({
     passengers: (state, action) => {
+      const day = (state && state.values && state.values['birthday-day']) || ''
+
       switch(action.type) {
         case actionTypes.BLUR:
-          let firstName = translitInput(state.values.firstName)
-          let lastName = translitInput(state.values.lastName)
-
+          const firstName = translitInput(state.values.firstName)
+          const lastName = translitInput(state.values.lastName)
+          let daySlice = day
+          if (Number(day[0]) === 0) daySlice = day.slice(1)
           const memberTranslate = state.values.member && state.values.member.map((member) => {
-            let firstNameMember = translitInput(member.firstName)
-            let lastNameMember = translitInput(member.lastName)
+            const firstNameMember = translitInput(member.firstName)
+            const lastNameMember = translitInput(member.lastName)
 
             return {
               ...member,
@@ -48,12 +51,13 @@ const rootReducer = combineReducers({
             }
           })
           
-          return {...state, values:{...state.values, firstName, lastName, member: memberTranslate}}
+          return {...state, values:{...state.values, 'birthday-day': daySlice, firstName, lastName, member: memberTranslate}}
         case actionTypes.CHANGE:
-          const day = (state.values && state.values['birthday-day']) || ''
           const month = (state.values && state.values['birthday-month']) || ''
           const year = (state.values && state.values['birthday-year']) || ''
           const birthday = `${year}-${month}-${day}`
+          let dayJoin = day
+          if (day.length === 1) dayJoin = 0 + day
 
           const memberNew = state.values.member && state.values.member.map((member) => {
             const dayMember = member['birthday-day'] || ''
@@ -65,7 +69,7 @@ const rootReducer = combineReducers({
               birthday: birthdayMember,
             }
           })
-          return {...state, values: {...state.values, birthday, member: memberNew}}
+          return {...state, values: {...state.values, 'birthday-day': dayJoin, birthday, member: memberNew}}
         case actionTypes.ARRAY_PUSH:
           const member = state.values.member
           const counter = countCounter(member)
