@@ -7,7 +7,7 @@
     "@kupibilet/react-dates": "~8.2.0",
     "@kupibilet/ui": "^1.4.12",
     "cleave.js": "s-kobets/cleave.js",
-    "moment": "^2.18.1",
+    "moment": "^2.19.3",
     "polished": "^1.1.2",
     "rc-collapse": "^1.7.5",
     "rc-select": "^6.8.6",
